@@ -2,7 +2,7 @@
 
 🚀 Desarrollado con **Next.js** | 🎨 Minimalista y simple
 
-🔗 **[Visita mi portafolio](URL_DE_TU_PORTAFOLIO)**  
+🔗 **[Visita mi portafolio](https://nerasun-portfolio.vercel.app/)**  
 
 ## 📌 Sobre el proyecto  
 Este es mi portafolio personal donde muestro mi trayectoria, experiencia laboral y proyectos destacados.  
