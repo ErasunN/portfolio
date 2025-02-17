@@ -85,7 +85,7 @@ export const SOCIAL_LINKS: SocialLink[] = [
     },
     {
         label: 'Instagram',
-        link: 'https://www.instagram.com/nico-erasun',
+        link: 'https://www.instagram.com/nico_erasun/',
     },
 ]
 
