@@ -1,101 +1,235 @@
-import Image from "next/image";
+'use client'
+import { motion } from 'motion/react'
+import { EMAIL, PROJECTS, SOCIAL_LINKS, WORK_EXPERIENCE } from './data';
+import { MorphingModal, MorphingModalTrigger, MorphingModalContainer, MorphingModalContent, MorphingModalClose } from '@/components/ui/Modal'
+import { XIcon, ImageIcon } from 'lucide-react';
+import { Spotlight } from '@/components/ui/Spotlight';
+import MagneticLink from '@/components/ui/MagneticLink';
+
+
+const VARIANTS_CONTAINER = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+    },
+  },
+}
+
+const VARIANTS_SECTION = {
+  hidden: { opacity: 0, y: 20, filter: 'blur(8px)' },
+  visible: { opacity: 1, y: 0, filter: 'blur(0px)' },
+}
+
+const TRANSITION_SECTION = {
+  duration: 0.3,
+}
+
+type ProjectVideoProps = {
+  src: string | null
+}
+
+const ProjectVideo = ({ src }: ProjectVideoProps) => {
+  const videoSrc = src ? `/${src}` : undefined
+
+  return (
+    <MorphingModal
+      transition={{
+        type: 'spring',
+        bounce: 0,
+        duration: 0.3,
+      }}
+    >
+      <MorphingModalTrigger>
+        {videoSrc ? (
+          <video
+            src={videoSrc}
+            autoPlay
+            loop
+            muted
+            className="aspect-video w-full cursor-zoom-in rounded-xl"
+            onError={(e) => {
+              const target = e.target as HTMLVideoElement;
+              target.style.display = 'none';
+              target.parentElement?.classList.add('fallback-container');
+            }}
+          />
+        ) : (
+          <div className="aspect-video w-full cursor-zoom-in rounded-xl bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center">
+            <ImageIcon className="h-12 w-12 text-zinc-400" />
+          </div>
+        )}
+      </MorphingModalTrigger>
+      <MorphingModalContainer>
+        <MorphingModalContent className="relative aspect-video rounded-2xl bg-zinc-50 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950 dark:ring-zinc-800/50">
+          {videoSrc ? (
+            <video
+              src={videoSrc}
+              autoPlay
+              loop
+              muted
+              className="aspect-video h-[50vh] w-full rounded-xl md:h-[70vh]"
+              onError={(e) => {
+                const target = e.target as HTMLVideoElement;
+                target.style.display = 'none';
+                target.parentElement?.classList.add('fallback-container');
+              }}
+            />
+          ) : (
+            <div className="aspect-video h-[50vh] w-full rounded-xl md:h-[70vh] bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center">
+              <ImageIcon className="h-20 w-20 text-zinc-400" />
+            </div>
+          )}
+        </MorphingModalContent>
+        <MorphingModalClose
+          className="fixed top-6 right-6 h-fit w-fit rounded-full bg-white p-1"
+          variants={{
+            initial: { opacity: 0 },
+            animate: {
+              opacity: 1,
+              transition: { delay: 0.3, duration: 0.1 },
+            },
+            exit: { opacity: 0, transition: { duration: 0 } },
+          }}
+        >
+          <XIcon className="h-5 w-5 text-zinc-500" />
+        </MorphingModalClose>
+      </MorphingModalContainer>
+    </MorphingModal>
+  )
+}
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <motion.main
+      className="space-y-24"
+      variants={VARIANTS_CONTAINER}
+      initial="hidden"
+      animate="visible"
+    >
+      <motion.section
+        variants={VARIANTS_SECTION}
+        transition={TRANSITION_SECTION}
+      >
+        <div className="flex-1">
+          <p className="text-zinc-600 dark:text-zinc-300">
+            Focused on creating intuitive and performant web experiences.
+            Bridging the gap between front and back development.
+          </p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </motion.section>
+
+      <motion.section
+        variants={VARIANTS_SECTION}
+        transition={TRANSITION_SECTION}
+      >
+        <h3 className="mb-5 text-lg font-medium text-zinc-900 dark:text-zinc-100">Selected Projects</h3>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+          {PROJECTS.map((project) => (
+            <div key={project.name} className="space-y-2">
+              <div className="relative rounded-2xl bg-zinc-50/40 p-1 ring-1 ring-zinc-200/50 ring-inset dark:bg-zinc-950/40 dark:ring-zinc-800/50">
+                <ProjectVideo src={project.video} />
+              </div>
+              <div className="px-1">
+                <a
+                  className="font-base group relative inline-block font-[450] text-zinc-900 dark:text-zinc-100"
+                  href={project.link}
+                  target="_blank"
+                >
+                  {project.name}
+                  <span className="absolute bottom-0.5 left-0 block h-[1px] w-full max-w-0 bg-zinc-900 transition-all duration-200 group-hover:max-w-full"></span>
+                </a>
+                <p className="text-base text-zinc-600 dark:text-zinc-400">
+                  {project.description}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </motion.section>
+
+      <motion.section
+        variants={VARIANTS_SECTION}
+        transition={TRANSITION_SECTION}
+      >
+        <h3 className="mb-5 text-lg font-medium text-zinc-900 dark:text-zinc-100">Work Experience</h3>
+        <div className="flex flex-col space-y-2">
+          {WORK_EXPERIENCE.map((job) => (
+            job.link ? (
+              <a
+                className="relative overflow-hidden rounded-2xl bg-zinc-300/30 p-[1px] dark:bg-zinc-900/30"
+                href={job.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                key={job.id}
+              >
+                <Spotlight
+                  className="from-zinc-900 via-zinc-800 to-zinc-700 blur-2xl dark:from-zinc-100 dark:via-zinc-200 dark:to-zinc-300"
+                  size={96}
+                />
+                <div className="relative h-full w-full rounded-[15px] bg-white p-4 dark:bg-zinc-950">
+                  <div className="relative flex w-full flex-row justify-between">
+                    <div>
+                      <h4 className="font-normal text-zinc-900 dark:text-zinc-100">
+                        {job.title}
+                      </h4>
+                      <p className="text-zinc-500 dark:text-zinc-400">
+                        {job.company}
+                      </p>
+                    </div>
+                    <p className="text-zinc-600 dark:text-zinc-400">
+                      {job.start} - {job.end}
+                    </p>
+                  </div>
+                </div>
+              </a>
+            ) : (
+              <div key={job.id} className="relative overflow-hidden rounded-2xl bg-zinc-300/30 p-[1px] dark:bg-zinc-900/30">
+                <Spotlight
+                  className="from-zinc-900 via-zinc-800 to-zinc-700 blur-2xl dark:from-zinc-100 dark:via-zinc-200 dark:to-zinc-300"
+                  size={96}
+                />
+                <div className="relative h-full w-full rounded-[15px] bg-white p-4 dark:bg-zinc-950">
+                  <div className="relative flex w-full flex-row justify-between">
+                    <div>
+                      <h4 className="font-normal text-zinc-900 dark:text-zinc-100">
+                        {job.title}
+                      </h4>
+                      <p className="text-zinc-500 dark:text-zinc-400">
+                        {job.company}
+                      </p>
+                    </div>
+                    <p className="text-zinc-600 dark:text-zinc-400">
+                      {job.start} - {job.end}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )
+          ))}
+        </div>
+      </motion.section>
+
+      <motion.section
+        variants={VARIANTS_SECTION}
+        transition={TRANSITION_SECTION}
+      >
+        <h3 className="mb-5 text-lg font-medium text-zinc-900 dark:text-zinc-100">Connect</h3>
+        <p className="mb-5 text-zinc-700 dark:text-zinc-300">
+          Feel free to contact me at{' '}
+          <a className="underline text-slate-700 dark:text-slate-300 font-semibold" href={`mailto:${EMAIL}`}>
+            {EMAIL}
+          </a>
+        </p>
+        <div className="flex items-center justify-start space-x-3">
+          {SOCIAL_LINKS.map((link) => (
+            <MagneticLink key={link.label} href={link.link} className="px-4 py-2 rounded-md bg-stone-800 text-stone-100 font-semibold dark:bg-zinc-950 dark:text-zinc-100">
+              {link.label}
+            </MagneticLink>
+          ))}
+        </div>
+      </motion.section>
+    </motion.main>
   );
 }
